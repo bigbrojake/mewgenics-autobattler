@@ -1,0 +1,5 @@
+0.0.2
+Changed the player_cat.gon file to a patch file to maximize compatibility with other mods modifying the player cat logic.
+
+0.0.1 -
+Launch
