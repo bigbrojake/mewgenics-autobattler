@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Battler AI Configurator</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --primary-color: #bb86fc;
+            --secondary-color: #03dac6;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333;
+            --card-bg: #252525;
+            --input-bg: #333;
+            --accent-gradient: linear-gradient(135deg, #6200ea 0%, #3700b3 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .instructions {
+            background-color: rgba(3, 218, 198, 0.1);
+            border: 1px solid var(--secondary-color);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .instructions code {
+            background-color: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--secondary-color);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 4rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.4);
+            border-color: var(--primary-color);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            border-color: var(--primary-color);
+        }
+
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            border-top: 1px solid var(--border-color);
+            z-index: 100;
+        }
+
+        button {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(98, 0, 234, 0.3);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(98, 0, 234, 0.5);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button.secondary {
+            background: transparent;
+            border: 2px solid var(--text-muted);
+            color: var(--text-muted);
+            box-shadow: none;
+        }
+
+        button.secondary:hover {
+            border-color: var(--text-color);
+            color: var(--text-color);
+        }
+
+        /* Success animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #00c853;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            animation: fadeIn 0.3s ease-out;
+            display: none;
+            z-index: 101;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Auto Battler AI Configurator</h1>
+        <p class="subtitle">Customize the tactical behavior of your units</p>
+    </header>
+
+    <div class="instructions">
+        <strong>How to use:</strong> Select behaviors below, then click "Generate Config". 
+        <br>
+        Save the downloaded file to: <code>/mods/Auto Battler 0.1.0_a/data/passives/util_passives.gon.patch</code>
+    </div>
+
+    <div id="app" class="controls">
+        <!-- Cards will be injected here by JS -->
+    </div>
+
+    <div class="action-bar">
+        <button class="secondary" onclick="resetToDefaults()">Reset Defaults</button>
+        <button onclick="generateConfig()">Download Config</button>
+    </div>
+
+    <div id="toast" class="toast">Configuration generated! Check your downloads.</div>
+
+    <script>
+        const classes = ["Fighter", "Tank", "Hunter", "Mage", "Medic", "Thief", "Monk", "Butcher", "Necromancer", "Druid", "Tinkerer", "Psychic", "Jester"];
+        
+        const behaviors = [
+            "stay_close",
+            "stay_close_always_move",
+            "keep_distance",
+            "keep_distance_always_move",
+            "keep_ranged_distance",
+            "keep_max_ranged_distance",
+            "stay_near_allies",
+            "stay_near_allies_always_move",
+            "random",
+            "stay_far_always_move"
+        ];
+
+        const defaults = {
+            "Fighter": "stay_close_always_move",
+            "Tank": "stay_close",
+            "Hunter": "keep_max_ranged_distance",
+            "Mage": "keep_ranged_distance",
+            "Medic": "stay_near_allies",
+            "Thief": "keep_ranged_distance",
+            "Monk": "stay_close_always_move",
+            "Butcher": "stay_close",
+            "Necromancer": "keep_max_ranged_distance",
+            "Druid": "keep_ranged_distance",
+            "Tinkerer": "keep_ranged_distance",
+            "Psychic": "keep_ranged_distance",
+            "Jester": "stay_close_always_move"
+        };
+
+        const app = document.getElementById('app');
+
+        // Initialize UI
+        function init() {
+            app.innerHTML = '';
+            classes.forEach(cls => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                const title = document.createElement('h2');
+                title.textContent = cls;
+                
+                const label = document.createElement('label');
+                label.textContent = "Movement Behavior";
+
+                const select = document.createElement('select');
+                select.id = `select-${cls}`;
+                
+                behaviors.forEach(b => {
+                    const option = document.createElement('option');
+                    option.value = b;
+                    option.textContent = b.replace(/_/g, ' ');
+                    select.appendChild(option);
+                });
+
+                // Set initial value from defaults
+                select.value = defaults[cls];
+
+                card.appendChild(title);
+                card.appendChild(label);
+                card.appendChild(select);
+                app.appendChild(card);
+            });
+        }
+
+        function resetToDefaults() {
+            if(confirm('Reset all classes to default behaviors?')) {
+                classes.forEach(cls => {
+                    document.getElementById(`select-${cls}`).value = defaults[cls];
+                });
+            }
+        }
+
+        function generateConfig() {
+            let patchContent = "// --- Tactical Logic Definitions (AUTO-GENERATED) ---\n\n";
+
+            classes.forEach(cls => {
+                const selectedBehavior = document.getElementById(`select-${cls}`).value;
+                
+                patchContent += `AI_${cls}_Logic.add {\n`;
+                patchContent += `    name "${cls} AI"\n`;
+                patchContent += `    desc "Internal logic: Custom ${cls} behavior."\n`;
+                patchContent += `    passives {\n`;
+                patchContent += `        Uncontrollable 1\n`;
+                patchContent += `        ReplaceBrain {\n`;
+                patchContent += `            brain GenericBrain\n`;
+                patchContent += `            decision_weights default\n`;
+                patchContent += `            move_weights ${selectedBehavior}\n`;
+                patchContent += `        }\n`;
+                patchContent += `    }\n`;
+                patchContent += `}\n\n`;
+            });
+
+            patchContent += "// --- Hooking into Vanilla Placeholders ---\n\n";
+
+            classes.forEach(cls => {
+                patchContent += `STARTER_PLACEHOLDER_${cls}.merge {\n`;
+                patchContent += `    passives {\n`;
+                patchContent += `        AI_${cls}_Logic 1\n`;
+                patchContent += `    }\n`;
+                patchContent += `}\n\n`;
+            });
+
+            downloadFile("util_passives.gon.patch", patchContent);
+            showToast();
+        }
+
+        function downloadFile(filename, content) {
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Boot
+        init();
+
+    </script>
+</body>
+</html>

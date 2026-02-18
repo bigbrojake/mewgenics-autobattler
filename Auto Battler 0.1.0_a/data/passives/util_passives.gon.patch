@@ -1,0 +1,251 @@
+// --- Tactical Logic Definitions (AUTO-GENERATED) ---
+
+AI_Fighter_Logic.add {
+    name "Fighter AI"
+    desc "Internal logic: Custom Fighter behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights keep_distance
+        }
+    }
+}
+
+AI_Tank_Logic.add {
+    name "Tank AI"
+    desc "Internal logic: Custom Tank behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights stay_close
+        }
+    }
+}
+
+AI_Hunter_Logic.add {
+    name "Hunter AI"
+    desc "Internal logic: Custom Hunter behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights keep_max_ranged_distance
+        }
+    }
+}
+
+AI_Mage_Logic.add {
+    name "Mage AI"
+    desc "Internal logic: Custom Mage behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights keep_ranged_distance
+        }
+    }
+}
+
+AI_Medic_Logic.add {
+    name "Medic AI"
+    desc "Internal logic: Custom Medic behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights stay_near_allies
+        }
+    }
+}
+
+AI_Thief_Logic.add {
+    name "Thief AI"
+    desc "Internal logic: Custom Thief behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights keep_ranged_distance
+        }
+    }
+}
+
+AI_Monk_Logic.add {
+    name "Monk AI"
+    desc "Internal logic: Custom Monk behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights stay_close_always_move
+        }
+    }
+}
+
+AI_Butcher_Logic.add {
+    name "Butcher AI"
+    desc "Internal logic: Custom Butcher behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights stay_close
+        }
+    }
+}
+
+AI_Necromancer_Logic.add {
+    name "Necromancer AI"
+    desc "Internal logic: Custom Necromancer behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights keep_max_ranged_distance
+        }
+    }
+}
+
+AI_Druid_Logic.add {
+    name "Druid AI"
+    desc "Internal logic: Custom Druid behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights keep_ranged_distance
+        }
+    }
+}
+
+AI_Tinkerer_Logic.add {
+    name "Tinkerer AI"
+    desc "Internal logic: Custom Tinkerer behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights keep_ranged_distance
+        }
+    }
+}
+
+AI_Psychic_Logic.add {
+    name "Psychic AI"
+    desc "Internal logic: Custom Psychic behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights keep_ranged_distance
+        }
+    }
+}
+
+AI_Jester_Logic.add {
+    name "Jester AI"
+    desc "Internal logic: Custom Jester behavior."
+    passives {
+        Uncontrollable 1
+        ReplaceBrain {
+            brain GenericBrain
+            decision_weights default
+            move_weights stay_close_always_move
+        }
+    }
+}
+
+// --- Hooking into Vanilla Placeholders ---
+
+STARTER_PLACEHOLDER_Fighter.merge {
+    passives {
+        AI_Fighter_Logic 1
+    }
+}
+
+STARTER_PLACEHOLDER_Tank.merge {
+    passives {
+        AI_Tank_Logic 1
+    }
+}
+
+STARTER_PLACEHOLDER_Hunter.merge {
+    passives {
+        AI_Hunter_Logic 1
+    }
+}
+
+STARTER_PLACEHOLDER_Mage.merge {
+    passives {
+        AI_Mage_Logic 1
+    }
+}
+
+STARTER_PLACEHOLDER_Medic.merge {
+    passives {
+        AI_Medic_Logic 1
+    }
+}
+
+STARTER_PLACEHOLDER_Thief.merge {
+    passives {
+        AI_Thief_Logic 1
+    }
+}
+
+STARTER_PLACEHOLDER_Monk.merge {
+    passives {
+        AI_Monk_Logic 1
+    }
+}
+
+STARTER_PLACEHOLDER_Butcher.merge {
+    passives {
+        AI_Butcher_Logic 1
+    }
+}
+
+STARTER_PLACEHOLDER_Necromancer.merge {
+    passives {
+        AI_Necromancer_Logic 1
+    }
+}
+
+STARTER_PLACEHOLDER_Druid.merge {
+    passives {
+        AI_Druid_Logic 1
+    }
+}
+
+STARTER_PLACEHOLDER_Tinkerer.merge {
+    passives {
+        AI_Tinkerer_Logic 1
+    }
+}
+
+STARTER_PLACEHOLDER_Psychic.merge {
+    passives {
+        AI_Psychic_Logic 1
+    }
+}
+
+STARTER_PLACEHOLDER_Jester.merge {
+    passives {
+        AI_Jester_Logic 1
+    }
+}
+
